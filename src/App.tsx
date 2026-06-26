@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { useImageConverter } from './hooks/useImageConverter';
 import { ConverterCard } from './components/ConverterCard';
 import { DropZone } from './components/DropZone';
 import { FileList } from './components/FileList';
 import { Controls } from './components/Controls';
 import { Sparkles } from 'lucide-react';
+
 
 function App() {
   const {
@@ -28,6 +30,35 @@ function App() {
   } = useImageConverter();
 
   const successCount = items.filter((item) => item.status === 'success').length;
+
+  // Support pasting images from clipboard (Ctrl+V)
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const clipboardItems = e.clipboardData?.items;
+      if (!clipboardItems) return;
+
+      const pastedFiles: File[] = [];
+      for (let i = 0; i < clipboardItems.length; i++) {
+        const item = clipboardItems[i];
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          if (file) {
+            pastedFiles.push(file);
+          }
+        }
+      }
+
+      if (pastedFiles.length > 0) {
+        handleFilesAdd(pastedFiles);
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => {
+      window.removeEventListener('paste', handlePaste);
+    };
+  }, [handleFilesAdd]);
+
 
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-between py-12 px-4 md:px-8 select-none overflow-hidden">
