@@ -67,14 +67,10 @@ function App() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute w-24 h-24 aero-bubble animate-float-slow left-[8%] top-[100%]"></div>
         <div className="absolute w-16 h-16 aero-bubble animate-float-medium left-[25%] top-[100%] [animation-delay:4s]"></div>
-        <div className="absolute w-32 h-32 aero-bubble animate-float-slow left-[42%] top-[100%] [animation-delay:8s]"></div>
-        <div className="absolute w-12 h-12 aero-bubble animate-float-fast left-[58%] top-[100%] [animation-delay:2s]"></div>
-        <div className="absolute w-20 h-20 aero-bubble animate-float-medium left-[73%] top-[100%] [animation-delay:6s]"></div>
-        <div className="absolute w-28 h-28 aero-bubble animate-float-slow left-[88%] top-[100%] [animation-delay:11s]"></div>
-        <div className="absolute w-14 h-14 aero-bubble animate-float-fast left-[18%] top-[100%] [animation-delay:7s]"></div>
-        <div className="absolute w-26 h-26 aero-bubble animate-float-slow left-[34%] top-[100%] [animation-delay:14s]"></div>
-        <div className="absolute w-18 h-18 aero-bubble animate-float-medium left-[64%] top-[100%] [animation-delay:5s]"></div>
-        <div className="absolute w-30 h-30 aero-bubble animate-float-slow left-[80%] top-[100%] [animation-delay:3s]"></div>
+        <div className="absolute w-32 h-32 aero-bubble animate-float-slow left-[45%] top-[100%] [animation-delay:8s]"></div>
+        <div className="absolute w-14 h-14 aero-bubble animate-float-fast left-[62%] top-[100%] [animation-delay:2s]"></div>
+        <div className="absolute w-20 h-20 aero-bubble animate-float-medium left-[75%] top-[100%] [animation-delay:6s]"></div>
+        <div className="absolute w-28 h-28 aero-bubble animate-float-slow left-[90%] top-[100%] [animation-delay:11s]"></div>
       </div>
 
       {/* Header */}
