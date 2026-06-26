@@ -136,10 +136,10 @@ function App() {
       {/* Footer */}
       <footer className="relative z-10 w-full text-center text-xs text-slate-500 mt-8">
         <p>
-          &copy; {new Date().getFullYear()} Web Image Converter. Разработано в стиле Glassmorphism.
+          &copy; {new Date().getFullYear()} Web Image Converter.
         </p>
         <p className="mt-1">
-          Все вычисления выполняются локально в вашей песочнице с помощью Canvas API.
+          Все вычисления выполняются локально в браузере с помощью Canvas API.
         </p>
       </footer>
     </div>
