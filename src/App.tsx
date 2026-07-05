@@ -1,12 +1,29 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMediaConverter } from './hooks/useMediaConverter';
+import { useConversionHistory } from './hooks/useConversionHistory';
 import { ConverterCard } from './components/ConverterCard';
 import { DropZone } from './components/DropZone';
 import { FileList } from './components/FileList';
 import { Controls } from './components/Controls';
-import { Sparkles } from 'lucide-react';
+import { HistoryDrawer } from './components/HistoryDrawer';
+import { Sparkles, Sun, Moon, History } from 'lucide-react';
 
 function App() {
+  // Theme state
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    // System preferences fallback
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  // History Drawer state
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+  // Load history hook
+  const { history, stats, addRecord, clearHistory, removeRecord } = useConversionHistory();
+
+  // Load media converter hook, passing addRecord as callback
   const {
     items,
     imageSettings,
@@ -30,9 +47,15 @@ function App() {
     setCustomSuffix,
     convertAll,
     downloadAllZip,
-  } = useMediaConverter();
+  } = useMediaConverter(addRecord);
 
   const successCount = items.filter((item) => item.status === 'success').length;
+
+  // Apply theme to document element
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   // Support pasting files from clipboard (Ctrl+V)
   useEffect(() => {
@@ -62,9 +85,30 @@ function App() {
     };
   }, [handleFilesAdd]);
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col justify-between py-12 px-4 md:px-8 select-none overflow-hidden z-10">
+    <div className="relative min-h-screen w-full flex flex-col justify-between py-12 px-4 md:px-8 select-none overflow-hidden z-10 transition-colors duration-300">
+      {/* Quick Controls (Theme & History) */}
+      <div className="absolute top-4 right-4 md:top-8 md:right-8 z-20 flex items-center gap-2">
+        <button
+          onClick={() => setIsHistoryOpen(true)}
+          className="p-3 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 backdrop-blur-md text-sky-700 dark:text-sky-300 hover:bg-white/60 dark:hover:bg-black/50 shadow-sm cursor-pointer transition-all duration-200"
+          title="История конвертаций"
+        >
+          <History className="w-5 h-5" />
+        </button>
+        <button
+          onClick={toggleTheme}
+          className="p-3 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 backdrop-blur-md text-sky-700 dark:text-sky-300 hover:bg-white/60 dark:hover:bg-black/50 shadow-sm cursor-pointer transition-all duration-200"
+          title="Сменить тему"
+        >
+          {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+        </button>
+      </div>
+
       {/* Floating Aero bubbles (Skeuomorphic organic elements) */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute w-24 h-24 aero-bubble animate-float-slow left-[8%] top-[100%]"></div>
@@ -77,14 +121,14 @@ function App() {
 
       {/* Header */}
       <header className="relative z-10 w-full max-w-2xl mx-auto text-center mb-8 flex flex-col items-center gap-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 border border-white/60 text-xs font-bold text-sky-700 tracking-wider uppercase backdrop-blur-md shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 text-xs font-bold text-sky-700 dark:text-sky-300 tracking-wider uppercase backdrop-blur-md shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-sky-500" />
           <span>Конвертация в браузере</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-900 via-sky-700 to-emerald-800 drop-shadow-sm py-2">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-900 via-sky-700 to-emerald-800 dark:from-sky-100 dark:via-sky-200 dark:to-emerald-300 drop-shadow-sm py-2">
           Web Media Converter
         </h1>
-        <p className="text-sm md:text-base font-semibold text-sky-900/80 max-w-md">
+        <p className="text-sm md:text-base font-semibold text-sky-900/80 dark:text-sky-200/80 max-w-md">
           Конвертируйте изображения, видео и аудио прямо в браузере. Быстро, безопасно, без загрузки на сервер.
         </p>
       </header>
@@ -114,7 +158,7 @@ function App() {
               </div>
               
               {/* Vertical Divider (Desktop) */}
-              <div className="hidden md:block w-px bg-white/50 self-stretch my-1 col-span-1 justify-self-center"></div>
+              <div className="hidden md:block w-px bg-white/50 dark:bg-white/10 self-stretch my-1 col-span-1 justify-self-center"></div>
 
               {/* Right pane: Controls & Summary */}
               <div className="md:col-span-4 flex flex-col justify-between">
@@ -149,7 +193,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full text-center text-xs text-sky-900/60 font-semibold mt-8">
+      <footer className="relative z-10 w-full text-center text-xs text-sky-900/60 dark:text-sky-200/60 font-semibold mt-8">
         <p>
           &copy; {new Date().getFullYear()} Web Media Converter.
         </p>
@@ -157,6 +201,16 @@ function App() {
           Изображения обрабатываются через Canvas API, видео и аудио — через FFmpeg WebAssembly. Все вычисления локальны.
         </p>
       </footer>
+
+      {/* History Drawer */}
+      <HistoryDrawer
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        history={history}
+        stats={stats}
+        onClear={clearHistory}
+        onRemoveRecord={removeRecord}
+      />
     </div>
   );
 }

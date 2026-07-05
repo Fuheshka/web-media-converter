@@ -8,6 +8,7 @@ import type {
   NamingType,
   UseMediaConverterReturn,
   OutputFormat,
+  MediaType,
 } from '../types/media';
 import { detectMediaType, getConvertedFilename, generateId } from '../utils/formatHelpers';
 import { convertImage } from './useImageEngine';
@@ -37,7 +38,15 @@ const DEFAULT_AUDIO_SETTINGS: AudioSettings = {
   trimEnd: null,
 };
 
-export function useMediaConverter(): UseMediaConverterReturn {
+export function useMediaConverter(
+  onConversionSuccess?: (
+    fileName: string,
+    outputName: string,
+    mediaType: MediaType,
+    originalSize: number,
+    convertedSize: number
+  ) => void
+): UseMediaConverterReturn {
   const [items, setItems] = useState<MediaItem[]>([]);
   const [imageSettings, setImageSettingsState] = useState<ImageSettings>(DEFAULT_IMAGE_SETTINGS);
   const [videoSettings, setVideoSettingsState] = useState<VideoSettings>(DEFAULT_VIDEO_SETTINGS);
@@ -229,6 +238,28 @@ export function useMediaConverter(): UseMediaConverterReturn {
     // Helper: mark item as success
     const markSuccess = (id: string, blob: Blob, url: string, oldUrl: string | null) => {
       if (oldUrl) URL.revokeObjectURL(oldUrl);
+
+      // Trigger history callback
+      const item = itemsToConvert.find((p) => p.id === id);
+      if (item && onConversionSuccess) {
+        const originalIndex = itemsToConvert.findIndex((p) => p.id === id);
+        const format = item.mediaType === 'image'
+          ? imageSettings.format
+          : item.mediaType === 'video'
+            ? videoSettings.format
+            : audioSettings.format;
+
+        const outputName = getConvertedFilename(
+          item.file.name,
+          format,
+          namingType,
+          customPrefix,
+          customSuffix,
+          originalIndex
+        );
+        onConversionSuccess(item.file.name, outputName, item.mediaType, item.file.size, blob.size);
+      }
+
       setItems((prev) =>
         prev.map((p) =>
           p.id === id
