@@ -4,7 +4,7 @@
 
 **Универсальный пакетный медиаконвертер прямо в браузере — быстро, безопасно и без загрузки на сервер.**
 
-[![Deploy to GitHub Pages](https://github.com/Fuheshka/web-image-converter/actions/workflows/deploy.yml/badge.svg)](https://github.com/Fuheshka/web-image-converter/actions/workflows/deploy.yml)
+[![Deploy to GitHub Pages](https://github.com/Fuheshka/web-media-converter/actions/workflows/deploy.yml/badge.svg)](https://github.com/Fuheshka/web-media-converter/actions/workflows/deploy.yml)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
@@ -14,7 +14,7 @@
 
 <br />
 
-[**🚀 Открыть приложение**](https://fuheshka.github.io/web-image-converter/) · [Сообщить о баге](https://github.com/Fuheshka/web-image-converter/issues) · [Предложить идею](https://github.com/Fuheshka/web-image-converter/issues)
+[**🚀 Открыть приложение**](https://fuheshka.github.io/web-media-converter/) · [Сообщить о баге](https://github.com/Fuheshka/web-media-converter/issues) · [Предложить идею](https://github.com/Fuheshka/web-media-converter/issues)
 
 </div>
 
