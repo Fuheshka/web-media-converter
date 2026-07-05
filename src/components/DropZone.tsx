@@ -16,9 +16,7 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
 
   const handleFiles = (fileList: FileList | null) => {
     if (!fileList) return;
-    const filesArray = Array.from(fileList).filter((file) =>
-      file.type.startsWith('image/')
-    );
+    const filesArray = Array.from(fileList);
     if (filesArray.length > 0) {
       onFileSelect(filesArray);
     }
@@ -26,6 +24,8 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleFiles(e.target.files);
+    // Reset input so re-selecting the same file works
+    if (e.target) e.target.value = '';
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -59,13 +59,13 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
       >
         <Plus className={`w-5 h-5 ${isDragActive ? 'text-sky-600' : 'text-sky-500'}`} />
         <span className="text-sm font-semibold text-slate-700">
-          {isDragActive ? 'Отпустите для загрузки' : 'Добавить еще изображения'}
+          {isDragActive ? 'Отпустите для загрузки' : 'Добавить ещё файлы'}
         </span>
         <input
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/*"
+          accept="image/*,video/*,audio/*"
           multiple
           className="hidden"
         />
@@ -95,14 +95,14 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
         </div>
         <div>
           <p className="text-lg font-bold text-slate-700 group-hover:text-slate-800 transition-colors duration-200">
-            Перетащите изображения сюда
+            Перетащите файлы сюда
           </p>
           <p className="text-sm font-medium text-slate-500 mt-1">
             или кликните для выбора на устройстве
           </p>
         </div>
         <p className="text-xs font-semibold text-sky-700/80 bg-sky-100/50 px-3 py-1 rounded-full mt-2">
-          Поддерживается загрузка нескольких файлов (PNG, JPEG, WEBP, GIF и др.)
+          Изображения, видео и аудио — PNG, JPG, WEBP, MP4, MP3, WAV и др.
         </p>
       </div>
 
@@ -110,7 +110,7 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept="image/*"
+        accept="image/*,video/*,audio/*"
         multiple
         className="hidden"
       />

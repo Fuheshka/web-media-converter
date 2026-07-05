@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useImageConverter } from './hooks/useImageConverter';
+import { useMediaConverter } from './hooks/useMediaConverter';
 import { ConverterCard } from './components/ConverterCard';
 import { DropZone } from './components/DropZone';
 import { FileList } from './components/FileList';
@@ -9,30 +9,32 @@ import { Sparkles } from 'lucide-react';
 function App() {
   const {
     items,
-    globalFormat,
-    globalQuality,
-    globalResizeMax,
+    imageSettings,
+    videoSettings,
+    audioSettings,
     isConverting,
     error,
     namingType,
     customPrefix,
     customSuffix,
-    setGlobalResizeMax,
-    setNamingType,
-    setCustomPrefix,
-    setCustomSuffix,
+    ffmpegLoaded,
+    ffmpegLoading,
     handleFilesAdd,
     removeFile,
     clearFiles,
-    setGlobalFormat,
-    setGlobalQuality,
+    setImageSettings,
+    setVideoSettings,
+    setAudioSettings,
+    setNamingType,
+    setCustomPrefix,
+    setCustomSuffix,
     convertAll,
     downloadAllZip,
-  } = useImageConverter();
+  } = useMediaConverter();
 
   const successCount = items.filter((item) => item.status === 'success').length;
 
-  // Support pasting images from clipboard (Ctrl+V)
+  // Support pasting files from clipboard (Ctrl+V)
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
       const clipboardItems = e.clipboardData?.items;
@@ -41,7 +43,7 @@ function App() {
       const pastedFiles: File[] = [];
       for (let i = 0; i < clipboardItems.length; i++) {
         const item = clipboardItems[i];
-        if (item.type.startsWith('image/')) {
+        if (item.type.startsWith('image/') || item.type.startsWith('video/') || item.type.startsWith('audio/')) {
           const file = item.getAsFile();
           if (file) {
             pastedFiles.push(file);
@@ -77,13 +79,13 @@ function App() {
       <header className="relative z-10 w-full max-w-2xl mx-auto text-center mb-8 flex flex-col items-center gap-3">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 border border-white/60 text-xs font-bold text-sky-700 tracking-wider uppercase backdrop-blur-md shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-          <span>Пакетная конвертация в браузере</span>
+          <span>Конвертация в браузере</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-900 via-sky-700 to-emerald-800 drop-shadow-sm py-2">
-          Web Image Converter
+          Web Media Converter
         </h1>
         <p className="text-sm md:text-base font-semibold text-sky-900/80 max-w-md">
-          Конвертируйте несколько изображений за раз прямо в браузере и скачивайте готовый архив ZIP. Быстро и безопасно.
+          Конвертируйте изображения, видео и аудио прямо в браузере. Быстро, безопасно, без загрузки на сервер.
         </p>
       </header>
 
@@ -100,7 +102,9 @@ function App() {
               <div className="md:col-span-7 flex flex-col gap-6">
                 <FileList
                   items={items}
-                  globalFormat={globalFormat}
+                  imageSettings={imageSettings}
+                  videoSettings={videoSettings}
+                  audioSettings={audioSettings}
                   namingType={namingType}
                   customPrefix={customPrefix}
                   customSuffix={customSuffix}
@@ -115,26 +119,28 @@ function App() {
               {/* Right pane: Controls & Summary */}
               <div className="md:col-span-4 flex flex-col justify-between">
                 <Controls
+                  items={items}
                   totalCount={items.length}
                   successCount={successCount}
-                  outputFormat={globalFormat}
-                  quality={globalQuality}
-                  globalResizeMax={globalResizeMax}
+                  imageSettings={imageSettings}
+                  videoSettings={videoSettings}
+                  audioSettings={audioSettings}
                   isConverting={isConverting}
                   error={error}
                   namingType={namingType}
                   customPrefix={customPrefix}
                   customSuffix={customSuffix}
-                  setOutputFormat={setGlobalFormat}
-                  setQuality={setGlobalQuality}
-                  setGlobalResizeMax={setGlobalResizeMax}
+                  ffmpegLoaded={ffmpegLoaded}
+                  ffmpegLoading={ffmpegLoading}
+                  setImageSettings={setImageSettings}
+                  setVideoSettings={setVideoSettings}
+                  setAudioSettings={setAudioSettings}
                   setNamingType={setNamingType}
                   setCustomPrefix={setCustomPrefix}
                   setCustomSuffix={setCustomSuffix}
                   onConvert={convertAll}
                   onDownloadZip={downloadAllZip}
                   onClear={clearFiles}
-                  items={items}
                 />
               </div>
             </div>
@@ -145,10 +151,10 @@ function App() {
       {/* Footer */}
       <footer className="relative z-10 w-full text-center text-xs text-sky-900/60 font-semibold mt-8">
         <p>
-          &copy; {new Date().getFullYear()} Web Image Converter.
+          &copy; {new Date().getFullYear()} Web Media Converter.
         </p>
         <p className="mt-1">
-          Все вычисления выполняются локально в браузере с помощью Canvas API.
+          Изображения обрабатываются через Canvas API, видео и аудио — через FFmpeg WebAssembly. Все вычисления локальны.
         </p>
       </footer>
     </div>

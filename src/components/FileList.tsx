@@ -1,63 +1,91 @@
-import { useEffect, useState } from 'react';
-import { Trash2, Loader2, Check, AlertCircle, Download, FileImage, Search, X } from 'lucide-react';
-import { getConvertedFilename } from '../hooks/useImageConverter';
-import type { ConversionItem, OutputFormat, NamingType } from '../hooks/useImageConverter';
+import { useState } from 'react';
+import { Trash2, Loader2, Check, AlertCircle, Download, Search, X, FileImage, Film, Music } from 'lucide-react';
+import { getConvertedFilename, formatSize, formatDuration } from '../utils/formatHelpers';
+import { ProgressBar } from './ProgressBar';
+import { MediaPreview } from './MediaPreview';
+import type { MediaItem, NamingType, ImageSettings, VideoSettings, AudioSettings, OutputFormat } from '../types/media';
 
 interface FileListProps {
-  items: ConversionItem[];
-  globalFormat: OutputFormat;
+  items: MediaItem[];
+  imageSettings: ImageSettings;
+  videoSettings: VideoSettings;
+  audioSettings: AudioSettings;
   namingType: NamingType;
   customPrefix: string;
   customSuffix: string;
   onRemove: (id: string) => void;
 }
 
-const formatSize = (bytes: number): string => {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-};
+function getMediaTypeIcon(mediaType: string) {
+  switch (mediaType) {
+    case 'image': return <FileImage className="w-3 h-3" />;
+    case 'video': return <Film className="w-3 h-3" />;
+    case 'audio': return <Music className="w-3 h-3" />;
+    default: return null;
+  }
+}
+
+function getMediaTypeColor(mediaType: string) {
+  switch (mediaType) {
+    case 'image': return 'text-sky-600 bg-sky-100 border-sky-200/50';
+    case 'video': return 'text-purple-600 bg-purple-100 border-purple-200/50';
+    case 'audio': return 'text-amber-600 bg-amber-100 border-amber-200/50';
+    default: return 'text-slate-600 bg-slate-100 border-slate-200/50';
+  }
+}
 
 function FileRow({
   item,
-  globalFormat,
+  format,
   namingType,
   customPrefix,
   customSuffix,
   index,
   onRemove,
 }: {
-  item: ConversionItem;
-  globalFormat: OutputFormat;
+  item: MediaItem;
+  format: OutputFormat;
   namingType: NamingType;
   customPrefix: string;
   customSuffix: string;
   index: number;
   onRemove: () => void;
 }) {
-  const [previewUrl, setPreviewUrl] = useState<string>('');
-
-  useEffect(() => {
-    const url = URL.createObjectURL(item.file);
-    setPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [item.file]);
-
   const originalSizeStr = formatSize(item.file.size);
   const convertedSizeStr = item.convertedSize ? formatSize(item.convertedSize) : '';
-  
+
+  const downloadName = getConvertedFilename(
+    item.file.name,
+    format,
+    namingType,
+    customPrefix,
+    customSuffix,
+    index
+  );
+
+  // Programmatic download — avoids Chrome blocking blob: URL anchors under COEP headers
+  const handleDownload = () => {
+    if (!item.convertedBlob) return;
+    const url = URL.createObjectURL(item.convertedBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = downloadName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
+  };
+
   // Calculate savings
   let savingsText = '';
   let isSmaller = false;
   let isBigger = false;
-  
+
   if (item.status === 'success' && item.convertedSize !== null) {
     const diff = item.file.size - item.convertedSize;
     isSmaller = diff > 0;
     isBigger = diff < 0;
-    
+
     if (item.file.size > 0) {
       const pct = Math.round((diff / item.file.size) * 100);
       if (diff === 0) {
@@ -65,56 +93,45 @@ function FileRow({
       } else {
         savingsText = pct > 0 ? `-${pct}%` : `+${Math.abs(pct)}%`;
       }
-    } else {
-      if (item.convertedSize === 0) {
-        savingsText = '0%';
-      } else {
-        savingsText = '+100%';
-        isBigger = true;
-      }
     }
   }
-
-  const downloadName = getConvertedFilename(
-    item.file.name,
-    globalFormat,
-    namingType,
-    customPrefix,
-    customSuffix,
-    index
-  );
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/40 border border-white/50 hover:bg-white/60 transition-all duration-150 shadow-sm">
       {/* Mini-preview */}
-      <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/80 flex-shrink-0 bg-slate-200">
-        {previewUrl ? (
-          <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-400">
-            <FileImage className="w-5 h-5" />
-          </div>
-        )}
-      </div>
+      <MediaPreview file={item.file} mediaType={item.mediaType} className="w-12 h-12" />
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-bold text-slate-800 truncate" title={downloadName}>
-          {downloadName}
-        </p>
-        <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-500">
+        <div className="flex items-center gap-1.5">
+          <p className="text-sm font-bold text-slate-800 truncate" title={downloadName}>
+            {downloadName}
+          </p>
+          <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[9px] font-bold border ${getMediaTypeColor(item.mediaType)}`}>
+            {getMediaTypeIcon(item.mediaType)}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 mt-0.5 text-xs text-slate-500 flex-wrap">
           <span className="truncate max-w-[120px]" title={item.file.name}>
             {item.file.name}
           </span>
           <span>({originalSizeStr})</span>
+          {/* Duration for video/audio */}
+          {item.duration != null && item.duration > 0 && (
+            <span className="text-slate-400">{formatDuration(item.duration)}</span>
+          )}
+          {/* Resolution for image/video */}
+          {item.width != null && item.height != null && item.mediaType !== 'audio' && (
+            <span className="text-slate-400">{item.width}×{item.height}</span>
+          )}
           {item.status === 'success' && (
             <>
               <span>&rarr;</span>
               <span className="text-sky-600 font-bold">{convertedSizeStr}</span>
               {savingsText && (
                 <span className={`font-bold px-1.5 py-0.5 rounded-md text-[10px] ${
-                  isSmaller 
-                    ? 'text-emerald-700 bg-emerald-100 border border-emerald-200/50' 
+                  isSmaller
+                    ? 'text-emerald-700 bg-emerald-100 border border-emerald-200/50'
                     : isBigger
                       ? 'text-amber-700 bg-amber-100 border border-amber-200/50'
                       : 'text-slate-700 bg-slate-100 border border-slate-200/50'
@@ -125,6 +142,14 @@ function FileRow({
             </>
           )}
         </div>
+
+        {/* Progress bar for converting items */}
+        {item.status === 'converting' && item.progress > 0 && item.progress < 100 && (
+          <div className="mt-1.5 flex items-center gap-2">
+            <ProgressBar progress={item.progress} className="flex-1" />
+            <span className="text-[10px] font-bold text-sky-600 min-w-[32px] text-right">{item.progress}%</span>
+          </div>
+        )}
       </div>
 
       {/* Status & Actions */}
@@ -132,20 +157,20 @@ function FileRow({
         {item.status === 'converting' && (
           <Loader2 className="w-5 h-5 text-sky-500 animate-spin" />
         )}
-        
-        {item.status === 'success' && item.convertedUrl && (
+
+        {item.status === 'success' && item.convertedBlob && (
           <>
             <div className="text-emerald-600 bg-emerald-100 border border-emerald-200 p-0.5 rounded-full">
               <Check className="w-4 h-4" />
             </div>
-            <a
-              href={item.convertedUrl}
-              download={downloadName}
+            <button
+              type="button"
+              onClick={handleDownload}
               title="Скачать этот файл"
-              className="p-2 rounded-xl text-slate-500 hover:text-sky-600 hover:bg-white/80 transition-colors border border-transparent hover:border-white/40 shadow-none hover:shadow-sm"
+              className="p-2 rounded-xl text-slate-500 hover:text-sky-600 hover:bg-white/80 transition-colors border border-transparent hover:border-white/40 shadow-none hover:shadow-sm cursor-pointer"
             >
               <Download className="w-4 h-4" />
-            </a>
+            </button>
           </>
         )}
 
@@ -174,7 +199,9 @@ function FileRow({
 
 export function FileList({
   items,
-  globalFormat,
+  imageSettings,
+  videoSettings,
+  audioSettings,
   namingType,
   customPrefix,
   customSuffix,
@@ -183,10 +210,19 @@ export function FileList({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'idle' | 'converting' | 'success' | 'error'>('all');
 
+  const getFormatForItem = (item: MediaItem): OutputFormat => {
+    switch (item.mediaType) {
+      case 'image': return imageSettings.format;
+      case 'video': return videoSettings.format;
+      case 'audio': return audioSettings.format;
+    }
+  };
+
   const filteredItems = items.filter((item, index) => {
+    const format = getFormatForItem(item);
     const targetName = getConvertedFilename(
       item.file.name,
-      globalFormat,
+      format,
       namingType,
       customPrefix,
       customSuffix,
@@ -196,11 +232,16 @@ export function FileList({
     const matchesSearch =
       item.file.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       targetName.toLowerCase().includes(searchQuery.toLowerCase());
-      
+
     const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    
+
     return matchesSearch && matchesStatus;
   });
+
+  // Count by type
+  const imageCount = items.filter((i) => i.mediaType === 'image').length;
+  const videoCount = items.filter((i) => i.mediaType === 'video').length;
+  const audioCount = items.filter((i) => i.mediaType === 'audio').length;
 
   return (
     <div className="flex flex-col gap-4">
@@ -210,6 +251,23 @@ export function FileList({
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
             Очередь файлов ({items.length})
           </span>
+          <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
+            {imageCount > 0 && (
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-600">
+                <FileImage className="w-3 h-3" /> {imageCount}
+              </span>
+            )}
+            {videoCount > 0 && (
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-purple-50 text-purple-600">
+                <Film className="w-3 h-3" /> {videoCount}
+              </span>
+            )}
+            {audioCount > 0 && (
+              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600">
+                <Music className="w-3 h-3" /> {audioCount}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -241,12 +299,12 @@ export function FileList({
             { key: 'success', label: 'Готово' },
             { key: 'error', label: 'Ошибки' },
           ] as { key: typeof statusFilter; label: string }[]).map((pill) => {
-            const count = pill.key === 'all' 
-              ? items.length 
+            const count = pill.key === 'all'
+              ? items.length
               : items.filter((item) => item.status === pill.key).length;
-            
+
             const isActive = statusFilter === pill.key;
-            
+
             return (
               <button
                 key={pill.key}
@@ -278,7 +336,7 @@ export function FileList({
               <FileRow
                 key={item.id}
                 item={item}
-                globalFormat={globalFormat}
+                format={getFormatForItem(item)}
                 namingType={namingType}
                 customPrefix={customPrefix}
                 customSuffix={customSuffix}
