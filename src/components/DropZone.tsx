@@ -87,25 +87,27 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
           : 'border-sky-300/50 bg-white/30 hover:border-sky-400/80 hover:bg-white/50'
       }`}
     >
-      <div className="flex flex-col items-center gap-4 text-center px-4 relative z-10">
-        <div className={`p-4 rounded-full border transition-all duration-300 ${
+      <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left px-6 relative z-10">
+        <div className={`p-4 rounded-2xl border transition-all duration-300 flex-shrink-0 ${
           isDragActive 
-            ? 'bg-sky-500/20 text-sky-600 border-sky-400/40 scale-110' 
-            : 'bg-white/60 text-sky-500 border-sky-200/50 group-hover:text-sky-600 group-hover:scale-105 group-hover:bg-white'
+            ? 'bg-sky-500 text-white border-sky-400 scale-110 shadow-lg' 
+            : 'bg-gradient-to-b from-sky-400 to-sky-600 text-white border-sky-300 dark:bg-slate-800 dark:border-white/10 group-hover:scale-105 shadow-md'
         }`}>
           <Upload className="w-8 h-8" />
         </div>
-        <div>
-          <p className="text-lg font-bold text-slate-700 group-hover:text-slate-800 transition-colors duration-200">
+        <div className="flex flex-col gap-1">
+          <p className="text-lg font-black text-sky-950 dark:text-slate-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors duration-200">
             {t.dropFilesHere}
           </p>
-          <p className="text-sm font-medium text-slate-500 mt-1">
+          <p className="text-sm font-bold text-sky-900/90 dark:text-slate-300">
             {t.clickToSelect}
           </p>
+          <div className="mt-1">
+            <span className="inline-block text-xs font-extrabold text-sky-950 dark:text-sky-200 bg-white/80 dark:bg-sky-950/80 px-3 py-1 rounded-full border border-sky-300/80 dark:border-sky-800/80 shadow-2xs">
+              {t.supportedFormats}
+            </span>
+          </div>
         </div>
-        <p className="text-xs font-semibold text-sky-700/80 bg-sky-100/50 px-3 py-1 rounded-full mt-2">
-          {t.supportedFormats}
-        </p>
       </div>
 
       <input

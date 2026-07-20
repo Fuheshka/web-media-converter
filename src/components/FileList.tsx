@@ -251,23 +251,23 @@ export function FileList({
       {/* Search & Filter Header */}
       <div className="flex flex-col gap-2.5">
         <div className="flex justify-between items-center px-1">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+          <span className="text-xs font-black text-sky-950 dark:text-slate-100 uppercase tracking-wider">
             {t.fileQueue} ({items.length})
           </span>
-          <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-700 dark:text-slate-300">
             {imageCount > 0 && (
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-sky-50 text-sky-600">
-                <FileImage className="w-3 h-3" /> {imageCount}
+              <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-200 border border-sky-300/50">
+                <FileImage className="w-3 h-3 text-sky-600" /> {imageCount}
               </span>
             )}
             {videoCount > 0 && (
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-purple-50 text-purple-600">
-                <Film className="w-3 h-3" /> {videoCount}
+              <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-200 border border-purple-300/50">
+                <Film className="w-3 h-3 text-purple-600" /> {videoCount}
               </span>
             )}
             {audioCount > 0 && (
-              <span className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-600">
-                <Music className="w-3 h-3" /> {audioCount}
+              <span className="flex items-center gap-0.5 px-2 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-200 border border-amber-300/50">
+                <Music className="w-3 h-3 text-amber-600" /> {audioCount}
               </span>
             )}
           </div>
@@ -275,18 +275,18 @@ export function FileList({
 
         {/* Search Bar */}
         <div className="relative w-full">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+          <Search className="absolute left-3 top-2.5 w-4 h-4 text-sky-700 dark:text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="aero-input pl-9 pr-8 py-2 w-full rounded-2xl text-sm"
+            className="aero-input pl-9 pr-8 py-2 w-full rounded-2xl text-sm font-bold text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+              className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -313,10 +313,10 @@ export function FileList({
                 key={pill.key}
                 type="button"
                 onClick={() => setStatusFilter(pill.key)}
-                className={`px-3 py-1 rounded-xl text-[10px] font-semibold transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
                   isActive
                     ? 'aero-btn-blue text-[10px] py-1 px-3 shadow-sm'
-                    : 'aero-btn-glass text-[10px] py-1 px-3 border-transparent bg-white/20 hover:bg-white/40'
+                    : 'aero-btn-glass text-[10px] py-1 px-3 border-white/60 bg-white/70 hover:bg-white text-slate-950 dark:text-slate-200'
                 }`}
               >
                 {pill.label} ({count})

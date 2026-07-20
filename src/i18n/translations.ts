@@ -111,7 +111,7 @@ export const translations: Record<Language, TranslationSchema> = {
     supportedFormats: 'Изображения, видео и аудио — PNG, JPG, WEBP, MP4, MP3, WAV и др.',
 
     // FFmpeg status
-    ffmpegLoading: 'Загрузка FFmpeg...',
+    ffmpegLoading: 'Загрузка FFmpeg…',
     ffmpegReady: 'FFmpeg готов',
 
     // Accordion Titles & Badges
@@ -158,13 +158,13 @@ export const translations: Record<Language, TranslationSchema> = {
     sizeChange: 'Изменение размера',
     sizeUnchanged: 'Размер не изменился',
     downloadZip: 'Скачать архив ZIP',
-    converting: 'Обработка...',
+    converting: 'Обработка…',
     convertAll: 'Конвертировать всё',
     clearAll: 'Очистить всё',
 
     // File List
     fileQueue: 'Очередь файлов',
-    searchPlaceholder: 'Поиск по названию...',
+    searchPlaceholder: 'Поиск по названию…',
     filterAll: 'Все',
     filterIdle: 'Ожидают',
     filterConverting: 'В процессе',
@@ -204,7 +204,7 @@ export const translations: Record<Language, TranslationSchema> = {
     supportedFormats: 'Images, videos & audio — PNG, JPG, WEBP, MP4, MP3, WAV, etc.',
 
     // FFmpeg status
-    ffmpegLoading: 'Loading FFmpeg...',
+    ffmpegLoading: 'Loading FFmpeg…',
     ffmpegReady: 'FFmpeg Ready',
 
     // Accordion Titles & Badges

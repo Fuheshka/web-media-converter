@@ -257,8 +257,8 @@ export function Controls({
       )}
 
       {/* ─── Naming Options ─── */}
-      <div className="flex flex-col gap-2 p-4 rounded-2xl bg-white/20 border border-white/40">
-        <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5 mb-1">
+      <div className="flex flex-col gap-2 pt-4 border-t border-white/30 dark:border-white/10">
+        <label className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5 mb-1">
           <Type className="w-4 h-4 text-sky-500" />
           {t.namingTitle}
         </label>
@@ -286,7 +286,7 @@ export function Controls({
 
         {namingType === 'suffix' && (
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">{t.addToName}</span>
+            <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t.addToName}</span>
             <input
               type="text"
               value={customSuffix}
@@ -300,7 +300,7 @@ export function Controls({
 
         {namingType === 'custom' && (
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">{t.namePrefix}</span>
+            <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t.namePrefix}</span>
             <input
               type="text"
               value={customPrefix}
@@ -312,7 +312,7 @@ export function Controls({
           </div>
         )}
 
-        <div className="text-[10px] text-slate-500 mt-1 italic">
+        <div className="text-[10px] text-slate-700 dark:text-slate-300 mt-1 italic font-semibold">
           {t.example}: {namingType === 'original' && `photo.jpg`}
           {namingType === 'suffix' && `photo${customSuffix || '_converted'}.jpg`}
           {namingType === 'custom' && `${customPrefix || 'file'}_001.mp4`}

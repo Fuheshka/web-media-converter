@@ -16,7 +16,7 @@ export function AudioSettings({ settings, onChange, disabled }: AudioSettingsPro
     <div className="flex flex-col gap-4">
       {/* Format */}
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
+        <label className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
           <Music className="w-4 h-4 text-amber-500" />
           {t.format} ({t.audioSection})
         </label>
@@ -41,8 +41,8 @@ export function AudioSettings({ settings, onChange, disabled }: AudioSettingsPro
 
       {/* Bitrate */}
       {settings.format !== 'wav' && settings.format !== 'flac' && (
-        <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 border border-white/40">
-          <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{t.bitrate}</span>
+        <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10">
+          <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t.bitrate}</span>
           <div className="grid grid-cols-3 gap-1">
             {AUDIO_BITRATES.map((b) => (
               <button
@@ -64,8 +64,8 @@ export function AudioSettings({ settings, onChange, disabled }: AudioSettingsPro
       )}
 
       {/* Sample Rate */}
-      <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 border border-white/40">
-        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{t.sampleRate}</span>
+      <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10">
+        <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">{t.sampleRate}</span>
         <div className="grid grid-cols-2 gap-1">
           {AUDIO_SAMPLE_RATES.map((s) => (
             <button
@@ -86,14 +86,14 @@ export function AudioSettings({ settings, onChange, disabled }: AudioSettingsPro
       </div>
 
       {/* Trim */}
-      <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 border border-white/40">
-        <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
+      <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 dark:bg-black/20 border border-white/40 dark:border-white/10">
+        <label className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
           <Scissors className="w-4 h-4 text-amber-500" />
           {t.trim}
         </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">{t.trimStart}</span>
+            <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">{t.trimStart}</span>
             <input
               type="number"
               min="0"
@@ -106,7 +106,7 @@ export function AudioSettings({ settings, onChange, disabled }: AudioSettingsPro
             />
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">{t.trimEnd}</span>
+            <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300">{t.trimEnd}</span>
             <input
               type="number"
               min="0"
@@ -119,7 +119,7 @@ export function AudioSettings({ settings, onChange, disabled }: AudioSettingsPro
             />
           </div>
         </div>
-        <span className="text-[9px] text-slate-500 font-medium">
+        <span className="text-[10px] text-slate-700 dark:text-slate-300 font-semibold">
           {t.trimHint}
         </span>
       </div>

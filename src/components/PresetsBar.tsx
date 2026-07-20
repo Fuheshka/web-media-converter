@@ -1,4 +1,4 @@
-import { Zap, Globe, User, Video, Film, Music } from 'lucide-react';
+import { SlidersHorizontal, Globe, User, Video, Film, Music } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import type { ImageSettings, VideoSettings, AudioSettings } from '../types/media';
 
@@ -51,10 +51,10 @@ export function PresetsBar({
   ];
 
   return (
-    <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-white/20 dark:bg-black/20 border border-white/30 dark:border-white/10">
+    <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-white/30 dark:bg-black/20 border border-white/40 dark:border-white/10">
       <div className="flex items-center gap-1.5 px-0.5">
-        <Zap className="w-4 h-4 text-amber-500" />
-        <span className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+        <SlidersHorizontal className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+        <span className="text-xs font-black text-sky-950 dark:text-slate-100 uppercase tracking-wider">
           {t.presetsTitle}
         </span>
       </div>
@@ -65,7 +65,7 @@ export function PresetsBar({
             type="button"
             onClick={preset.apply}
             disabled={disabled}
-            className="px-2.5 py-1.5 rounded-xl bg-white/40 dark:bg-white/10 hover:bg-white/60 dark:hover:bg-white/20 border border-white/50 dark:border-white/5 text-xs font-semibold text-slate-700 dark:text-slate-200 cursor-pointer transition-all duration-150 flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shadow-2xs"
+            className="px-2.5 py-1.5 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 border border-white/90 dark:border-white/10 text-xs font-bold text-slate-950 dark:text-slate-100 cursor-pointer transition-all duration-150 flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed shadow-2xs"
           >
             {preset.icon}
             <span>{preset.label}</span>

@@ -126,14 +126,14 @@ function App() {
 
       {/* Header */}
       <header className="relative z-10 w-full max-w-2xl mx-auto text-center mb-8 flex flex-col items-center gap-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 text-xs font-bold text-sky-700 dark:text-sky-300 tracking-wider uppercase backdrop-blur-md shadow-sm">
-          <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/70 dark:bg-black/40 border border-white/80 dark:border-white/10 text-xs font-black text-sky-950 dark:text-sky-300 tracking-wider uppercase backdrop-blur-md shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
           <span>{t.headerBadge}</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-900 via-sky-700 to-emerald-800 dark:from-sky-100 dark:via-sky-200 dark:to-emerald-300 drop-shadow-sm py-2">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-950 dark:text-slate-100 drop-shadow-sm py-1">
           {t.headerTitle}
         </h1>
-        <p className="text-sm md:text-base font-semibold text-sky-900/80 dark:text-sky-200/80 max-w-md">
+        <p className="text-sm md:text-base font-extrabold text-slate-900 dark:text-sky-200 max-w-md">
           {t.headerSub}
         </p>
       </header>
@@ -198,11 +198,11 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 w-full text-center text-xs text-sky-900/60 dark:text-sky-200/60 font-semibold mt-8">
+      <footer className="relative z-10 w-full max-w-xl mx-auto text-center text-xs text-slate-900 dark:text-slate-100 font-extrabold mt-8 px-4 py-2.5 rounded-2xl bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 backdrop-blur-md shadow-xs">
         <p>
           &copy; {new Date().getFullYear()} {t.footerCopy}
         </p>
-        <p className="mt-1">
+        <p className="mt-1 opacity-90">
           {t.footerNote}
         </p>
       </footer>
