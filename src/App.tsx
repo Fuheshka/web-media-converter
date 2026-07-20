@@ -6,9 +6,13 @@ import { DropZone } from './components/DropZone';
 import { FileList } from './components/FileList';
 import { Controls } from './components/Controls';
 import { HistoryDrawer } from './components/HistoryDrawer';
+import { LanguageToggle } from './components/LanguageToggle';
+import { useLanguage } from './context/LanguageContext';
 import { Sparkles, Sun, Moon, History } from 'lucide-react';
 
 function App() {
+  const { t } = useLanguage();
+
   // Theme state
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('theme');
@@ -91,19 +95,20 @@ function App() {
 
   return (
     <div className="relative min-h-screen w-full flex flex-col justify-between py-12 px-4 md:px-8 select-none overflow-hidden z-10 transition-colors duration-300">
-      {/* Quick Controls (Theme & History) */}
+      {/* Quick Controls (Language, Theme & History) */}
       <div className="absolute top-4 right-4 md:top-8 md:right-8 z-20 flex items-center gap-2">
+        <LanguageToggle />
         <button
           onClick={() => setIsHistoryOpen(true)}
           className="p-3 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 backdrop-blur-md text-sky-700 dark:text-sky-300 hover:bg-white/60 dark:hover:bg-black/50 shadow-sm cursor-pointer transition-all duration-200"
-          title="История конвертаций"
+          title={t.historyTitle}
         >
           <History className="w-5 h-5" />
         </button>
         <button
           onClick={toggleTheme}
           className="p-3 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 backdrop-blur-md text-sky-700 dark:text-sky-300 hover:bg-white/60 dark:hover:bg-black/50 shadow-sm cursor-pointer transition-all duration-200"
-          title="Сменить тему"
+          title={t.toggleTheme}
         >
           {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
         </button>
@@ -123,13 +128,13 @@ function App() {
       <header className="relative z-10 w-full max-w-2xl mx-auto text-center mb-8 flex flex-col items-center gap-3">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 dark:bg-black/30 border border-white/60 dark:border-white/10 text-xs font-bold text-sky-700 dark:text-sky-300 tracking-wider uppercase backdrop-blur-md shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-          <span>Конвертация в браузере</span>
+          <span>{t.headerBadge}</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-900 via-sky-700 to-emerald-800 dark:from-sky-100 dark:via-sky-200 dark:to-emerald-300 drop-shadow-sm py-2">
-          Web Media Converter
+          {t.headerTitle}
         </h1>
         <p className="text-sm md:text-base font-semibold text-sky-900/80 dark:text-sky-200/80 max-w-md">
-          Конвертируйте изображения, видео и аудио прямо в браузере. Быстро, безопасно, без загрузки на сервер.
+          {t.headerSub}
         </p>
       </header>
 
@@ -195,10 +200,10 @@ function App() {
       {/* Footer */}
       <footer className="relative z-10 w-full text-center text-xs text-sky-900/60 dark:text-sky-200/60 font-semibold mt-8">
         <p>
-          &copy; {new Date().getFullYear()} Web Media Converter.
+          &copy; {new Date().getFullYear()} {t.footerCopy}
         </p>
         <p className="mt-1">
-          Изображения обрабатываются через Canvas API, видео и аудио — через FFmpeg WebAssembly. Все вычисления локальны.
+          {t.footerNote}
         </p>
       </footer>
 

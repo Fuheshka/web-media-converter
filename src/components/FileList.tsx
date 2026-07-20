@@ -4,6 +4,7 @@ import { getConvertedFilename, formatSize, formatDuration } from '../utils/forma
 import { ProgressBar } from './ProgressBar';
 import { MediaPreview } from './MediaPreview';
 import type { MediaItem, NamingType, ImageSettings, VideoSettings, AudioSettings, OutputFormat } from '../types/media';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FileListProps {
   items: MediaItem[];
@@ -51,6 +52,7 @@ function FileRow({
   index: number;
   onRemove: () => void;
 }) {
+  const { t } = useLanguage();
   const originalSizeStr = formatSize(item.file.size);
   const convertedSizeStr = item.convertedSize ? formatSize(item.convertedSize) : '';
 
@@ -166,7 +168,7 @@ function FileRow({
             <button
               type="button"
               onClick={handleDownload}
-              title="Скачать этот файл"
+              title={t.downloadThisFile}
               className="p-2 rounded-xl text-slate-500 hover:text-sky-600 hover:bg-white/80 transition-colors border border-transparent hover:border-white/40 shadow-none hover:shadow-sm cursor-pointer"
             >
               <Download className="w-4 h-4" />
@@ -175,7 +177,7 @@ function FileRow({
         )}
 
         {item.status === 'error' && (
-          <div className="text-rose-600 bg-rose-100 border border-rose-200 p-0.5 rounded-full" title={item.error || 'Ошибка'}>
+          <div className="text-rose-600 bg-rose-100 border border-rose-200 p-0.5 rounded-full" title={item.error || 'Error'}>
             <AlertCircle className="w-4 h-4" />
           </div>
         )}
@@ -187,7 +189,7 @@ function FileRow({
         <button
           onClick={onRemove}
           disabled={item.status === 'converting'}
-          title="Удалить"
+          title={t.deleteFile}
           className="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-500/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed border border-transparent hover:border-rose-200/25"
         >
           <Trash2 className="w-4 h-4" />
@@ -207,6 +209,7 @@ export function FileList({
   customSuffix,
   onRemove,
 }: FileListProps) {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'idle' | 'converting' | 'success' | 'error'>('all');
 
@@ -249,7 +252,7 @@ export function FileList({
       <div className="flex flex-col gap-2.5">
         <div className="flex justify-between items-center px-1">
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-            Очередь файлов ({items.length})
+            {t.fileQueue} ({items.length})
           </span>
           <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400">
             {imageCount > 0 && (
@@ -277,7 +280,7 @@ export function FileList({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Поиск по названию..."
+            placeholder={t.searchPlaceholder}
             className="aero-input pl-9 pr-8 py-2 w-full rounded-2xl text-sm"
           />
           {searchQuery && (
@@ -293,11 +296,11 @@ export function FileList({
         {/* Status Filter Pills */}
         <div className="flex flex-wrap gap-1 px-1">
           {([
-            { key: 'all', label: 'Все' },
-            { key: 'idle', label: 'Ожидают' },
-            { key: 'converting', label: 'В процессе' },
-            { key: 'success', label: 'Готово' },
-            { key: 'error', label: 'Ошибки' },
+            { key: 'all', label: t.filterAll },
+            { key: 'idle', label: t.filterIdle },
+            { key: 'converting', label: t.filterConverting },
+            { key: 'success', label: t.filterSuccess },
+            { key: 'error', label: t.filterError },
           ] as { key: typeof statusFilter; label: string }[]).map((pill) => {
             const count = pill.key === 'all'
               ? items.length
@@ -327,7 +330,7 @@ export function FileList({
       <div className="flex flex-col gap-2 max-h-[350px] overflow-y-auto pr-1">
         {filteredItems.length === 0 ? (
           <div className="text-center py-8 text-sm font-semibold text-slate-400 border border-dashed border-sky-300/40 rounded-2xl bg-white/10">
-            Файлы не найдены
+            {t.noFilesFound}
           </div>
         ) : (
           filteredItems.map((item) => {

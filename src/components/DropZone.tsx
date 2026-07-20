@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Upload, Plus } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface DropZoneProps {
   onFileSelect: (files: File[]) => void;
@@ -7,6 +8,7 @@ interface DropZoneProps {
 }
 
 export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
+  const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragActive, setIsDragActive] = useState(false);
 
@@ -59,7 +61,7 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
       >
         <Plus className={`w-5 h-5 ${isDragActive ? 'text-sky-600' : 'text-sky-500'}`} />
         <span className="text-sm font-semibold text-slate-700">
-          {isDragActive ? 'Отпустите для загрузки' : 'Добавить ещё файлы'}
+          {isDragActive ? t.dragActive : t.addMoreFiles}
         </span>
         <input
           type="file"
@@ -95,14 +97,14 @@ export function DropZone({ onFileSelect, compact = false }: DropZoneProps) {
         </div>
         <div>
           <p className="text-lg font-bold text-slate-700 group-hover:text-slate-800 transition-colors duration-200">
-            Перетащите файлы сюда
+            {t.dropFilesHere}
           </p>
           <p className="text-sm font-medium text-slate-500 mt-1">
-            или кликните для выбора на устройстве
+            {t.clickToSelect}
           </p>
         </div>
         <p className="text-xs font-semibold text-sky-700/80 bg-sky-100/50 px-3 py-1 rounded-full mt-2">
-          Изображения, видео и аудио — PNG, JPG, WEBP, MP4, MP3, WAV и др.
+          {t.supportedFormats}
         </p>
       </div>
 

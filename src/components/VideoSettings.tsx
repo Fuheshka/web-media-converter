@@ -1,6 +1,7 @@
 import { Film, Settings, Scissors } from 'lucide-react';
 import type { VideoSettings as VideoSettingsType } from '../types/media';
 import { VIDEO_FORMATS, VIDEO_CODECS, VIDEO_RESOLUTIONS, VIDEO_FPS_OPTIONS } from '../types/media';
+import { useLanguage } from '../context/LanguageContext';
 
 interface VideoSettingsProps {
   settings: VideoSettingsType;
@@ -9,13 +10,15 @@ interface VideoSettingsProps {
 }
 
 export function VideoSettings({ settings, onChange, disabled }: VideoSettingsProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-col gap-4">
       {/* Format */}
       <div className="flex flex-col gap-2">
         <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
           <Film className="w-4 h-4 text-purple-500" />
-          Формат видео
+          {t.format} ({t.videoSection})
         </label>
         <div className="grid grid-cols-3 gap-1.5">
           {VIDEO_FORMATS.map((fmt) => (
@@ -41,7 +44,7 @@ export function VideoSettings({ settings, onChange, disabled }: VideoSettingsPro
         <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 border border-white/40">
           <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
             <Settings className="w-4 h-4 text-purple-500" />
-            Кодек
+            {t.codec}
           </label>
           <div className="grid grid-cols-2 gap-1">
             {VIDEO_CODECS.map((c) => (
@@ -68,7 +71,7 @@ export function VideoSettings({ settings, onChange, disabled }: VideoSettingsPro
         <div className="flex flex-col gap-3 p-3 rounded-2xl bg-white/20 border border-white/40">
           {/* Resolution */}
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Разрешение</span>
+            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{t.resolution}</span>
             <div className="grid grid-cols-3 gap-1">
               {VIDEO_RESOLUTIONS.map((r) => (
                 <button
@@ -90,7 +93,7 @@ export function VideoSettings({ settings, onChange, disabled }: VideoSettingsPro
 
           {/* FPS */}
           <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Частота кадров</span>
+            <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{t.fps}</span>
             <div className="grid grid-cols-4 gap-1">
               {VIDEO_FPS_OPTIONS.map((f) => (
                 <button
@@ -116,11 +119,11 @@ export function VideoSettings({ settings, onChange, disabled }: VideoSettingsPro
       <div className="flex flex-col gap-2 p-3 rounded-2xl bg-white/20 border border-white/40">
         <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
           <Scissors className="w-4 h-4 text-purple-500" />
-          Обрезка
+          {t.trim}
         </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">Начало (сек)</span>
+            <span className="text-[10px] font-semibold text-slate-500">{t.trimStart}</span>
             <input
               type="number"
               min="0"
@@ -133,7 +136,7 @@ export function VideoSettings({ settings, onChange, disabled }: VideoSettingsPro
             />
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">Конец (сек)</span>
+            <span className="text-[10px] font-semibold text-slate-500">{t.trimEnd}</span>
             <input
               type="number"
               min="0"
@@ -141,13 +144,13 @@ export function VideoSettings({ settings, onChange, disabled }: VideoSettingsPro
               value={settings.trimEnd ?? ''}
               onChange={(e) => onChange({ trimEnd: e.target.value ? parseFloat(e.target.value) : null })}
               disabled={disabled}
-              placeholder="до конца"
+              placeholder={t.trimUntilEnd}
               className="aero-input px-3 py-1.5 rounded-xl text-xs"
             />
           </div>
         </div>
         <span className="text-[9px] text-slate-500 font-medium">
-          Оставьте пустым, чтобы не обрезать.
+          {t.trimHint}
         </span>
       </div>
     </div>

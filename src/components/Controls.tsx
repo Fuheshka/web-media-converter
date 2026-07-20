@@ -5,6 +5,7 @@ import { formatSize } from '../utils/formatHelpers';
 import { VideoSettings } from './VideoSettings';
 import { AudioSettings } from './AudioSettings';
 import { useState } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ControlsProps {
   items: MediaItem[];
@@ -93,6 +94,7 @@ export function Controls({
   onDownloadZip,
   onClear,
 }: ControlsProps) {
+  const { t } = useLanguage();
   const showQualitySlider = imageSettings.format === 'jpg' || imageSettings.format === 'jpeg' || imageSettings.format === 'webp';
   const allConverted = successCount === totalCount && totalCount > 0;
 
@@ -119,21 +121,21 @@ export function Controls({
       {ffmpegLoading && (
         <div className="flex items-center gap-2 p-3 rounded-2xl bg-purple-50 border border-purple-200/50 text-sm">
           <Loader2 className="w-4 h-4 text-purple-500 animate-spin" />
-          <span className="text-purple-700 font-semibold text-xs">Загрузка FFmpeg...</span>
+          <span className="text-purple-700 font-semibold text-xs">{t.ffmpegLoading}</span>
         </div>
       )}
 
       {(hasVideo || hasAudio) && ffmpegLoaded && !ffmpegLoading && (
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200/50">
           <Zap className="w-3.5 h-3.5 text-emerald-500" />
-          <span className="text-emerald-700 font-semibold text-[10px]">FFmpeg готов</span>
+          <span className="text-emerald-700 font-semibold text-[10px]">{t.ffmpegReady}</span>
         </div>
       )}
 
       {/* ─── Image Settings ─── */}
       {hasImages && (
         <SectionAccordion
-          title="Изображения"
+          title={t.imagesSection}
           icon={<FileImage className="w-4 h-4 text-sky-500" />}
           badge={<span className="text-[10px] font-bold text-sky-600 bg-sky-100 px-1.5 py-0.5 rounded-md">{imageCount}</span>}
         >
@@ -141,7 +143,7 @@ export function Controls({
             {/* Format */}
             <div className="flex flex-col gap-2">
               <label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
-                Формат
+                {t.format}
               </label>
               <div className="grid grid-cols-4 gap-1.5">
                 {IMAGE_FORMATS.filter((f) => f !== 'jpeg').map((format) => (
@@ -173,7 +175,7 @@ export function Controls({
                   className="w-3.5 h-3.5 rounded text-sky-600 bg-white/40 border-sky-300 accent-sky-500 cursor-pointer"
                 />
                 <Maximize2 className="w-3.5 h-3.5 text-sky-500" />
-                Ресайз
+                {t.resize}
               </label>
               {imageSettings.resizeMax !== null && (
                 <div className="grid grid-cols-4 gap-1">
@@ -200,7 +202,7 @@ export function Controls({
             {showQualitySlider && (
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Качество</span>
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{t.quality}</span>
                   <span className="text-sky-600 font-extrabold text-sm">{Math.round(imageSettings.quality * 100)}%</span>
                 </div>
                 <input
@@ -214,8 +216,8 @@ export function Controls({
                   className="w-full h-1 my-1"
                 />
                 <div className="flex justify-between text-[9px] text-slate-500 font-semibold">
-                  <span>Меньший размер</span>
-                  <span>Лучшее качество</span>
+                  <span>{t.smallerSize}</span>
+                  <span>{t.betterQuality}</span>
                 </div>
               </div>
             )}
@@ -226,7 +228,7 @@ export function Controls({
       {/* ─── Video Settings ─── */}
       {hasVideo && (
         <SectionAccordion
-          title="Видео"
+          title={t.videoSection}
           icon={<Film className="w-4 h-4 text-purple-500" />}
           badge={<span className="text-[10px] font-bold text-purple-600 bg-purple-100 px-1.5 py-0.5 rounded-md">{videoCount}</span>}
         >
@@ -237,7 +239,7 @@ export function Controls({
       {/* ─── Audio Settings ─── */}
       {hasAudio && (
         <SectionAccordion
-          title="Аудио"
+          title={t.audioSection}
           icon={<Music className="w-4 h-4 text-amber-500" />}
           badge={<span className="text-[10px] font-bold text-amber-600 bg-amber-100 px-1.5 py-0.5 rounded-md">{audioCount}</span>}
         >
@@ -249,13 +251,13 @@ export function Controls({
       <div className="flex flex-col gap-2 p-4 rounded-2xl bg-white/20 border border-white/40">
         <label className="text-sm font-bold text-slate-700 flex items-center gap-1.5 mb-1">
           <Type className="w-4 h-4 text-sky-500" />
-          Имена файлов
+          {t.namingTitle}
         </label>
         <div className="grid grid-cols-3 gap-1 mb-2">
           {([
-            { key: 'original', label: 'Оригинал' },
-            { key: 'suffix', label: 'Суффикс' },
-            { key: 'custom', label: 'Своё имя' },
+            { key: 'original', label: t.namingOriginal },
+            { key: 'suffix', label: t.namingSuffix },
+            { key: 'custom', label: t.namingCustom },
           ] as { key: NamingType; label: string }[]).map((opt) => (
             <button
               key={opt.key}
@@ -275,7 +277,7 @@ export function Controls({
 
         {namingType === 'suffix' && (
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">Добавить к имени:</span>
+            <span className="text-[10px] font-semibold text-slate-500">{t.addToName}</span>
             <input
               type="text"
               value={customSuffix}
@@ -289,7 +291,7 @@ export function Controls({
 
         {namingType === 'custom' && (
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-semibold text-slate-500">Префикс названия:</span>
+            <span className="text-[10px] font-semibold text-slate-500">{t.namePrefix}</span>
             <input
               type="text"
               value={customPrefix}
@@ -302,7 +304,7 @@ export function Controls({
         )}
 
         <div className="text-[10px] text-slate-500 mt-1 italic">
-          Пример: {namingType === 'original' && `photo.jpg`}
+          {t.example}: {namingType === 'original' && `photo.jpg`}
           {namingType === 'suffix' && `photo${customSuffix || '_converted'}.jpg`}
           {namingType === 'custom' && `${customPrefix || 'file'}_001.mp4`}
         </div>
@@ -332,10 +334,10 @@ export function Controls({
                 : 'text-slate-700'
           }`}>
             {isSmaller
-              ? 'Суммарная экономия'
+              ? t.totalSavings
               : isBigger
-                ? 'Изменение размера'
-                : 'Размер не изменился'}
+                ? t.sizeChange
+                : t.sizeUnchanged}
           </span>
           <div className="flex justify-center items-baseline gap-2 mt-1">
             <span className={`text-2xl font-black ${
@@ -379,7 +381,7 @@ export function Controls({
             className="w-full py-3.5 rounded-2xl aero-btn-green flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             <Download className="w-5 h-5" />
-            <span>Скачать архив ZIP ({successCount})</span>
+            <span>{t.downloadZip} ({successCount})</span>
           </button>
         )}
 
@@ -394,11 +396,11 @@ export function Controls({
             {isConverting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Обработка...</span>
+                <span>{t.converting}</span>
               </>
             ) : (
               <>
-                <span>Конвертировать всё ({totalCount})</span>
+                <span>{t.convertAll} ({totalCount})</span>
                 <ArrowRight className="w-5 h-5" />
               </>
             )}
@@ -413,7 +415,7 @@ export function Controls({
           className="w-full py-3 rounded-2xl aero-btn-glass flex items-center justify-center gap-2 cursor-pointer disabled:opacity-30"
         >
           <RefreshCw className="w-4 h-4" />
-          <span>Очистить всё</span>
+          <span>{t.clearAll}</span>
         </button>
       </div>
     </div>
