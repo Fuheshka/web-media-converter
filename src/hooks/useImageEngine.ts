@@ -64,7 +64,6 @@ export async function convertImage(
   // Draw original image (potentially resized)
   ctx.drawImage(img, 0, 0, width, height);
 
-  // Resolve MIME type
   const mimeMap: Record<string, string> = {
     jpg: 'image/jpeg',
     jpeg: 'image/jpeg',
@@ -77,20 +76,46 @@ export async function convertImage(
     tiff: 'image/tiff',
   };
   const mimeType = mimeMap[format] || `image/${format}`;
-  const compressionQuality = (format === 'png' || format === 'bmp' || format === 'gif' || format === 'ico' || format === 'tiff') ? undefined : quality;
+  
+  let finalBlob: Blob | null = null;
 
-  const blob = await new Promise<Blob | null>((resolve) => {
-    canvas.toBlob((b) => resolve(b), mimeType, compressionQuality);
-  });
+  if (settings.targetSizeMb && settings.targetSizeMb > 0) {
+    const targetBytes = settings.targetSizeMb * 1024 * 1024;
+    let low = 0.05;
+    let high = 0.95;
+    let bestBlob: Blob | null = null;
 
-  if (!blob) {
+    // Binary search quality for lossy formats (JPEG / WEBP / AVIF)
+    for (let i = 0; i < 6; i++) {
+      const midQuality = (low + high) / 2;
+      const b: Blob | null = await new Promise((res) => canvas.toBlob(res, mimeType, midQuality));
+      if (!b) break;
+
+      bestBlob = b;
+      if (b.size <= targetBytes) {
+        low = midQuality; // try higher quality
+      } else {
+        high = midQuality; // try lower quality
+      }
+    }
+    finalBlob = bestBlob;
+  }
+
+  if (!finalBlob) {
+    const compressionQuality = (format === 'png' || format === 'bmp' || format === 'gif' || format === 'ico' || format === 'tiff') ? undefined : quality;
+    finalBlob = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob((b) => resolve(b), mimeType, compressionQuality);
+    });
+  }
+
+  if (!finalBlob) {
     throw new Error('Сжатие изображения завершилось с ошибкой.');
   }
 
-  const url = URL.createObjectURL(blob);
+  const url = URL.createObjectURL(finalBlob);
 
   // Image conversion is instant — report 100%
   _onProgress?.(100);
 
-  return { blob, url };
+  return { blob: finalBlob, url };
 }

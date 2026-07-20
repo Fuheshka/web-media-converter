@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, Loader2, Check, AlertCircle, Download, Search, X, FileImage, Film, Music } from 'lucide-react';
+import { Trash2, Loader2, Check, AlertCircle, Download, Search, X, FileImage, Film, Music, Eye } from 'lucide-react';
 import { getConvertedFilename, formatSize, formatDuration } from '../utils/formatHelpers';
 import { ProgressBar } from './ProgressBar';
 import { MediaPreview } from './MediaPreview';
@@ -15,6 +15,7 @@ interface FileListProps {
   customPrefix: string;
   customSuffix: string;
   onRemove: (id: string) => void;
+  onCompare?: (item: MediaItem, name: string) => void;
 }
 
 function getMediaTypeIcon(mediaType: string) {
@@ -43,6 +44,7 @@ function FileRow({
   customSuffix,
   index,
   onRemove,
+  onCompare,
 }: {
   item: MediaItem;
   format: OutputFormat;
@@ -51,6 +53,7 @@ function FileRow({
   customSuffix: string;
   index: number;
   onRemove: () => void;
+  onCompare?: (item: MediaItem, name: string) => void;
 }) {
   const { t } = useLanguage();
   const originalSizeStr = formatSize(item.file.size);
@@ -165,11 +168,21 @@ function FileRow({
             <div className="text-emerald-600 bg-emerald-100 border border-emerald-200 p-0.5 rounded-full">
               <Check className="w-4 h-4" />
             </div>
+            {item.mediaType === 'image' && onCompare && (
+              <button
+                type="button"
+                onClick={() => onCompare(item, downloadName)}
+                title={t.openCompare}
+                className="p-2 rounded-xl text-sky-600 hover:text-sky-800 hover:bg-sky-100/80 transition-colors border border-sky-200/50 shadow-2xs cursor-pointer"
+              >
+                <Eye className="w-4 h-4" />
+              </button>
+            )}
             <button
               type="button"
               onClick={handleDownload}
               title={t.downloadThisFile}
-              className="p-2 rounded-xl text-slate-500 hover:text-sky-600 hover:bg-white/80 transition-colors border border-transparent hover:border-white/40 shadow-none hover:shadow-sm cursor-pointer"
+              className="p-2 rounded-xl text-slate-700 hover:text-sky-600 hover:bg-white/80 transition-colors border border-transparent hover:border-white/40 shadow-none hover:shadow-sm cursor-pointer"
             >
               <Download className="w-4 h-4" />
             </button>
@@ -208,6 +221,7 @@ export function FileList({
   customPrefix,
   customSuffix,
   onRemove,
+  onCompare,
 }: FileListProps) {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -345,6 +359,7 @@ export function FileList({
                 customSuffix={customSuffix}
                 index={originalIndex}
                 onRemove={() => onRemove(item.id)}
+                onCompare={onCompare}
               />
             );
           })

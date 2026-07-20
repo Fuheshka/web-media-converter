@@ -36,6 +36,7 @@ export interface ImageSettings {
   format: ImageFormat;
   quality: number; // 0.1–1.0
   resizeMax: number | null; // max dimension in px, null = no resize
+  targetSizeMb: number | null; // target size in MB, null = disabled
 }
 
 export interface VideoSettings {
@@ -46,6 +47,7 @@ export interface VideoSettings {
   resolution: number | null; // height in px, null = keep original (e.g. 1080, 720, 480)
   trimStart: number | null; // seconds
   trimEnd: number | null;   // seconds
+  targetSizeMb: number | null; // target size in MB, null = disabled
 }
 
 export interface AudioSettings {

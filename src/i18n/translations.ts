@@ -89,6 +89,17 @@ export interface TranslationSchema {
   historyEmptySub: string;
   deleteFromHistory: string;
 
+  // Compare & Target Size
+  compareTitle: string;
+  compareOriginal: string;
+  compareConverted: string;
+  openCompare: string;
+  targetSizeLabel: string;
+  targetSizeHint: string;
+  presetDiscord8: string;
+  presetDiscord25: string;
+  presetEmail10: string;
+
   // Footer
   footerCopy: string;
   footerNote: string;
@@ -184,6 +195,17 @@ export const translations: Record<Language, TranslationSchema> = {
     historyEmptySub: 'Здесь будут отображаться ваши сконвертированные файлы.',
     deleteFromHistory: 'Удалить из истории',
 
+    // Compare & Target Size
+    compareTitle: 'Сравнение «До / После»',
+    compareOriginal: 'Оригинал',
+    compareConverted: 'Результат',
+    openCompare: 'Сравнить качество',
+    targetSizeLabel: 'Целевой размер (МБ)',
+    targetSizeHint: 'Авто-подбор качества под лимит',
+    presetDiscord8: 'Discord (8 МБ)',
+    presetDiscord25: 'Discord (25 МБ)',
+    presetEmail10: 'Email (10 МБ)',
+
     // Footer
     footerCopy: 'Web Media Converter.',
     footerNote: 'Изображения обрабатываются через Canvas API, видео и аудио — через FFmpeg WebAssembly. Все вычисления локальны.',
@@ -276,6 +298,17 @@ export const translations: Record<Language, TranslationSchema> = {
     historyEmpty: 'History is empty',
     historyEmptySub: 'Your converted files will appear here.',
     deleteFromHistory: 'Remove from history',
+
+    // Compare & Target Size
+    compareTitle: 'Before / After Comparison',
+    compareOriginal: 'Original',
+    compareConverted: 'Converted',
+    openCompare: 'Compare Quality',
+    targetSizeLabel: 'Target Size (MB)',
+    targetSizeHint: 'Auto-fit quality to size limit',
+    presetDiscord8: 'Discord (8 MB)',
+    presetDiscord25: 'Discord (25 MB)',
+    presetEmail10: 'Email (10 MB)',
 
     // Footer
     footerCopy: 'Web Media Converter.',

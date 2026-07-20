@@ -15,9 +15,10 @@ import { convertImage } from './useImageEngine';
 import { convertVideo, convertAudio, isFFmpegLoaded } from './useFFmpegEngine';
 
 const DEFAULT_IMAGE_SETTINGS: ImageSettings = {
-  format: 'jpg',
+  format: 'webp',
   quality: 0.85,
   resizeMax: null,
+  targetSizeMb: null,
 };
 
 const DEFAULT_VIDEO_SETTINGS: VideoSettings = {
@@ -28,6 +29,7 @@ const DEFAULT_VIDEO_SETTINGS: VideoSettings = {
   resolution: null,
   trimStart: null,
   trimEnd: null,
+  targetSizeMb: null,
 };
 
 const DEFAULT_AUDIO_SETTINGS: AudioSettings = {

@@ -2,16 +2,50 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
+    <script src="/coi-serviceworker.js"></script>
     <link rel="icon" type="image/png" href="/icon-raw.png" />
     <link rel="apple-touch-icon" href="/icon-raw.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0284c7" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Media Converter | Конвертация изображений, видео и аудио онлайн</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Web Media Converter | Бесплатный конвертер изображений, видео и аудио онлайн</title>
+    <meta name="title" content="Web Media Converter | Бесплатный конвертер изображений, видео и аудио онлайн" />
     <meta name="description" content="Бесплатный конвертер медиафайлов прямо в браузере. Конвертируйте PNG, JPG, WEBP, MP4, WEBM, MP3, WAV и многое другое без загрузки на сервер. Быстро, безопасно, приватно." />
-    <meta property="og:title" content="Web Media Converter — конвертер изображений, видео и аудио" />
-    <meta property="og:description" content="Конвертируйте медиафайлы прямо в браузере. Без серверов, без ожидания, без ограничений." />
+    <meta name="keywords" content="конвертер видео, конвертер файлов онлайн, webp в png, mp4 в gif, mp3 конвертер, browser media converter, ffmpeg wasm" />
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:title" content="Web Media Converter — локальный конвертер изображений, видео и аудио" />
+    <meta property="og:description" content="Конвертируйте медиафайлы прямо в браузере. Без серверов, без ожидания, 100% приватно и бесплатно." />
+    <meta property="og:image" content="/social-preview.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="Web Media Converter Preview" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Web Media Converter — локальный конвертер медиафайлов" />
+    <meta name="twitter:description" content="Быстрая конвертация изображений, видео и аудио без загрузки на сервер." />
+    <meta name="twitter:image" content="/social-preview.png" />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Web Media Converter",
+        "operatingSystem": "Any",
+        "applicationCategory": "MultimediaApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Бесплатное веб-приложение для локальной конвертации видео, аудио и картинок в браузере с помощью WebAssembly."
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

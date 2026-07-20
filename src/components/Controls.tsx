@@ -230,6 +230,45 @@ export function Controls({
                 </div>
               </div>
             )}
+
+            {/* Target Size Limit (MB) */}
+            <div className="flex flex-col gap-2 pt-2 border-t border-white/20 dark:border-white/10">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                  {t.targetSizeLabel}
+                </span>
+                {imageSettings.targetSizeMb !== null && (
+                  <button
+                    type="button"
+                    onClick={() => setImageSettings({ targetSizeMb: null })}
+                    className="text-[10px] font-bold text-rose-500 hover:underline cursor-pointer"
+                  >
+                    Сбросить
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { label: '8 MB', size: 8 },
+                  { label: '25 MB', size: 25 },
+                  { label: '10 MB', size: 10 },
+                ].map((preset) => (
+                  <button
+                    key={preset.size}
+                    type="button"
+                    onClick={() => setImageSettings({ targetSizeMb: preset.size })}
+                    disabled={isConverting}
+                    className={`py-1.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+                      imageSettings.targetSizeMb === preset.size
+                        ? 'aero-btn-blue border-transparent'
+                        : 'aero-btn-glass border-transparent bg-white/70 hover:bg-white text-slate-950 dark:text-slate-100'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </SectionAccordion>
       )}

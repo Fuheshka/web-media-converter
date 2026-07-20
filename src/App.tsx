@@ -8,6 +8,7 @@ import { Controls } from './components/Controls';
 import { HistoryDrawer } from './components/HistoryDrawer';
 import { LanguageToggle } from './components/LanguageToggle';
 import { useLanguage } from './context/LanguageContext';
+import { CompareModal } from './components/CompareModal';
 import { Sparkles, Sun, Moon, History } from 'lucide-react';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
   // History Drawer state
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [compareItem, setCompareItem] = useState<{ originalFile: File; convertedBlob: Blob; name: string } | null>(null);
 
   // Load history hook
   const { history, stats, addRecord, clearHistory, removeRecord } = useConversionHistory();
@@ -52,6 +54,16 @@ function App() {
     convertAll,
     downloadAllZip,
   } = useMediaConverter(addRecord);
+
+  const handleOpenCompare = (item: any, outputName: string) => {
+    if (item.convertedBlob) {
+      setCompareItem({
+        originalFile: item.file,
+        convertedBlob: item.convertedBlob,
+        name: outputName,
+      });
+    }
+  };
 
   const successCount = items.filter((item) => item.status === 'success').length;
 
@@ -158,6 +170,7 @@ function App() {
                   customPrefix={customPrefix}
                   customSuffix={customSuffix}
                   onRemove={removeFile}
+                  onCompare={handleOpenCompare}
                 />
                 <DropZone onFileSelect={handleFilesAdd} compact />
               </div>
@@ -215,6 +228,15 @@ function App() {
         stats={stats}
         onClear={clearHistory}
         onRemoveRecord={removeRecord}
+      />
+
+      {/* Compare Modal */}
+      <CompareModal
+        isOpen={compareItem !== null}
+        onClose={() => setCompareItem(null)}
+        originalFile={compareItem?.originalFile || null}
+        convertedBlob={compareItem?.convertedBlob || null}
+        outputName={compareItem?.name || ''}
       />
     </div>
   );
