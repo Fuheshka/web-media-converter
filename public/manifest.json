@@ -1,0 +1,23 @@
+{
+  "short_name": "MediaConvert",
+  "name": "Web Media Converter",
+  "description": "100% Client-Side Web Media Converter. Convert images, videos & audio directly in your browser.",
+  "icons": [
+    {
+      "src": "./icon-raw.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "./",
+  "background_color": "#0f172a",
+  "theme_color": "#0284c7",
+  "display": "standalone",
+  "orientation": "any"
+}

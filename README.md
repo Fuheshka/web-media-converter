@@ -1,5 +1,7 @@
 <div align="center">
 
+![Web Media Converter Banner](public/social-preview.png)
+
 # 🖼️🎬🎵 Web Media Converter
 
 **All-in-one batch media converter right in your browser — fast, secure, and 100% serverless.**

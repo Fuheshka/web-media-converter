@@ -24,6 +24,14 @@ export interface TranslationSchema {
   videoSection: string;
   audioSection: string;
 
+  // Presets
+  presetsTitle: string;
+  presetWeb: string;
+  presetAvatar: string;
+  presetReels: string;
+  presetGif: string;
+  presetAudio: string;
+
   // Settings - Common
   format: string;
   resize: string;
@@ -111,6 +119,14 @@ export const translations: Record<Language, TranslationSchema> = {
     videoSection: 'Видео',
     audioSection: 'Аудио',
 
+    // Presets
+    presetsTitle: 'Быстрые пресеты',
+    presetWeb: 'Для веб-сайта (WebP 80%)',
+    presetAvatar: 'Аватарка (512px PNG)',
+    presetReels: 'Reels/Shorts (1080p MP4)',
+    presetGif: 'Быстрый GIF (480p)',
+    presetAudio: 'Аудио 128k MP3',
+
     // Settings - Common
     format: 'Формат',
     resize: 'Ресайз',
@@ -195,6 +211,14 @@ export const translations: Record<Language, TranslationSchema> = {
     imagesSection: 'Images',
     videoSection: 'Video',
     audioSection: 'Audio',
+
+    // Presets
+    presetsTitle: 'Quick Presets',
+    presetWeb: 'Web Optimized (WebP 80%)',
+    presetAvatar: 'Avatar (512px PNG)',
+    presetReels: 'Reels/Shorts (1080p MP4)',
+    presetGif: 'Fast GIF (480p)',
+    presetAudio: 'Audio 128k MP3',
 
     // Settings - Common
     format: 'Format',

@@ -4,6 +4,7 @@ import { IMAGE_FORMATS } from '../types/media';
 import { formatSize } from '../utils/formatHelpers';
 import { VideoSettings } from './VideoSettings';
 import { AudioSettings } from './AudioSettings';
+import { PresetsBar } from './PresetsBar';
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -131,6 +132,14 @@ export function Controls({
           <span className="text-emerald-700 font-semibold text-[10px]">{t.ffmpegReady}</span>
         </div>
       )}
+
+      {/* ─── Quick Presets Bar ─── */}
+      <PresetsBar
+        setImageSettings={setImageSettings}
+        setVideoSettings={setVideoSettings}
+        setAudioSettings={setAudioSettings}
+        disabled={isConverting}
+      />
 
       {/* ─── Image Settings ─── */}
       {hasImages && (

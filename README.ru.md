@@ -1,5 +1,7 @@
 <div align="center">
 
+![Web Media Converter Banner](public/social-preview.png)
+
 # 🖼️🎬🎵 Web Media Converter
 
 **Универсальный пакетный медиаконвертер прямо в браузере — быстро, безопасно и без загрузки на сервер.**
